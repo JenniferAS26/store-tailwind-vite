@@ -1,25 +1,40 @@
-import { useState, useEffect } from "react";
-import Layout from "../../Components/Layout";
-import Card from "../../Components/Card";
-import ProductDetail from "../../Components/ProductDetail";
+import { useContext } from 'react';
+import Layout from '../../Components/Layout';
+import Card from '../../Components/Card';
+import ProductDetail from '../../Components/ProductDetail';
+import { ShoppingCartContext } from '../../Context';
 
 const Home = () => {
-  const [products, setProducts] = useState(null); // cajita donde almacenamos la informacion. Siempre que pensemos en consumo de API pensemos en useEffect
-  useEffect(() => {
-    fetch('https://api.escuelajs.co/api/v1/products')
-      .then(response => response.json())
-      .then(data => setProducts(data))
-  }, []);
+  const context = useContext(ShoppingCartContext);
+
+  const renderView = () => {
+    if (context.filteredProducts?.length > 0) {
+      return (
+        context.filteredProducts?.map(product => (
+          <Card key={product.id} data={product} />
+        ))
+      )
+    } else {
+        return (
+          <div>We do not have anything</div>
+        )
+    }
+  }
 
   return (
     <Layout>
-        Home
-        <div className="grid gap-4 grid-cols-4 w-full max-w-screen-lg">
-          {
-            products?.map(product => <Card key={product.id} data={product} />)
-          }
-        </div>
-        <ProductDetail />
+      <div className='flex items-center justify-center relative w-80 mb-4'>
+        <h1 className='font-medium text-xl'>Exclusive Products</h1>
+      </div>
+      <input 
+        type='text'
+        placeholder='Search a product'
+        className='rounded-lg border border-black w-80 p-4 mb-4 focus:outline-none'
+        onChange={(event) => context.setSearchByTitle(event.target.value)} />
+      <div className='grid gap-4 grid-cols-4 w-full max-w-screen-lg'>
+        {renderView()}
+      </div>
+      <ProductDetail />
     </Layout>
   )
 }
