@@ -1,2 +1,5 @@
 # store-tailwind-vite
-Esta es una tienda online creada con Vite y TailwindCSS
+This is an app created using Vite and TailwindCSS
+
+## See deployed app in the following link
+https://ecommersvitetailwind.netlify.app/
